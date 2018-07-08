@@ -1,11 +1,17 @@
 package com.othiagoduarte.cursomc.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
+import org.hibernate.annotations.ManyToAny;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Categoria implements Serializable {
@@ -15,7 +21,11 @@ public class Categoria implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
-
+	
+	@JsonManagedReference
+	@ManyToMany(mappedBy="categorias")
+	private List<Produto> produtos = List.of();
+	
 	public Categoria() {
 	}
 
@@ -24,7 +34,7 @@ public class Categoria implements Serializable {
 		this.id = id;
 		this.nome = nome;
 	}
-
+	
 	public Integer getId() {
 		return id;
 	}
@@ -64,6 +74,14 @@ public class Categoria implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public List<Produto> getProdutos() {
+		return produtos;
+	}
+
+	public void setProdutos(List<Produto> produtos) {
+		this.produtos = produtos;
 	}
 
 }
